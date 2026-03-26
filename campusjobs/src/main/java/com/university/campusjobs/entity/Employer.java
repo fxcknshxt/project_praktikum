@@ -6,8 +6,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "employers")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employer {

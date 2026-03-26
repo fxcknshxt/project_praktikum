@@ -7,8 +7,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification {

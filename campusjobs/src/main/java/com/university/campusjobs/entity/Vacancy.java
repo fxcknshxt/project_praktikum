@@ -9,8 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vacancy {
