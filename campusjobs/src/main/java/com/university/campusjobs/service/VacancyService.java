@@ -31,4 +31,29 @@ public class VacancyService {
         return vacancyRepository.findById(id);
     }
 
+    public List<Vacancy> getVacanciesWithFilters(String keyword, String type, Long categoryId) {
+        List<Vacancy> vacancies = vacancyRepository.findByIsActiveTrue();
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            vacancies = vacancies.stream()
+                    .filter(v -> v.getTitle().toLowerCase().contains(keyword.toLowerCase()) ||
+                            v.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+                    .toList();
+        }
+
+        if (type != null && !type.trim().isEmpty()) {
+            vacancies = vacancies.stream()
+                    .filter(v -> v.getType().equals(type))
+                    .toList();
+        }
+
+        if (categoryId != null) {
+            vacancies = vacancies.stream()
+                    .filter(v -> v.getCategory() != null && v.getCategory().getId().equals(categoryId))
+                    .toList();
+        }
+
+        return vacancies;
+    }
+
 }

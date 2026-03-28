@@ -8,12 +8,11 @@
     <style>
         .card { transition: all 0.3s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .navbar { background-color: #343a40; }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="/index.html">Campus Jobs</a>
         <div class="navbar-nav ms-auto">
@@ -25,15 +24,29 @@
 </nav>
 
 <div class="container mt-4">
+    <h2>Вакансии и стажировки</h2>
+
+    <!-- Фильтры -->
     <div class="row mb-4">
-        <div class="col-md-8">
-            <h2>Доступные вакансии и стажировки</h2>
+        <div class="col-md-3">
+            <input type="text" id="keyword" class="form-control" placeholder="Поиск по названию...">
         </div>
-        <div class="col-md-4">
-            <div class="input-group">
-                <input type="text" id="searchInput" class="form-control" placeholder="Поиск по названию или описанию...">
-                <button class="btn btn-primary" onclick="searchVacancies()">Найти</button>
-            </div>
+        <div class="col-md-3">
+            <select id="typeFilter" class="form-select">
+                <option value="">Все типы занятости</option>
+                <option value="INTERNSHIP">Стажировка</option>
+                <option value="PART_TIME">Частичная занятость</option>
+                <option value="FULL_TIME">Полная занятость</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select id="categoryFilter" class="form-select">
+                <option value="">Все категории</option>
+                <!-- Заполнится динамически -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary w-100" onclick="applyFilters()">Применить фильтры</button>
         </div>
     </div>
 
@@ -43,11 +56,16 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    async function loadVacancies(keyword = '') {
-        let url = '/api/vacancies';
-        if (keyword) {
-            url = `/api/vacancies/search?keyword=${encodeURIComponent(keyword)}`;
-        }
+    let allCategories = [];
+
+    async function loadCategories() {
+        try {
+            const res = await fetch('/api/categories');
+        } catch(e) {}
+    }
+
+    async function loadVacancies(keyword = '', type = '', categoryId = '') {
+        let url = `/api/vacancies/filtered?keyword=${encodeURIComponent(keyword)}&type=${type}&categoryId=${categoryId}`;
 
         try {
             const response = await fetch(url);
@@ -57,46 +75,47 @@
             container.innerHTML = '';
 
             if (vacancies.length === 0) {
-                container.innerHTML = '<div class="col-12"><p class="text-center">Вакансий не найдено</p></div>';
+                container.innerHTML = '<div class="col-12 text-center"><p class="text-muted">Вакансий не найдено по заданным фильтрам</p></div>';
                 return;
             }
 
-            vacancies.forEach(vacancy => {
+            vacancies.forEach(v => {
                 const card = `
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100">
                             <div class="card-body">
-                                <h5 class="card-title">${vacancy.title}</h5>
-                                <p class="text-muted">${vacancy.employer?.companyName || 'Работодатель'}</p>
-                                <p class="card-text">${vacancy.description.substring(0, 120)}...</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge bg-primary">${vacancy.type === 'INTERNSHIP' ? 'Стажировка' : vacancy.type === 'PART_TIME' ? 'Частичная занятость' : 'Полная занятость'}</span>
-                                    ${vacancy.salary ? `<span class="fw-bold">${vacancy.salary} ₽</span>` : ''}
+                                <h5 class="card-title">${v.title}</h5>
+                                <p class="text-muted">${v.employer?.companyName || ''}</p>
+                                <p class="card-text">${v.description.substring(0, 110)}...</p>
+                                <div class="d-flex justify-content-between">
+                                    <span class="badge bg-primary">${v.type === 'INTERNSHIP' ? 'Стажировка' : v.type === 'PART_TIME' ? 'Частичная' : 'Полная'}</span>
+                                    ${v.salary ? `<span class="fw-bold">${v.salary} ₽</span>` : ''}
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="/vacancy-detail.html?id=${vacancy.id}" class="btn btn-outline-primary w-100">
-                                    Подробнее и подать заявку
-                                </a>
+                                <a href="/vacancy-detail.html?id=${v.id}" class="btn btn-outline-primary w-100">Подробнее</a>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 container.innerHTML += card;
             });
         } catch (error) {
-            console.error('Ошибка при загрузке вакансий:', error);
-            document.getElementById('vacanciesList').innerHTML =
-                '<div class="col-12"><p class="text-danger">Ошибка загрузки данных. Проверьте, запущен ли сервер.</p></div>';
+            console.error(error);
+            document.getElementById('vacanciesList').innerHTML = '<div class="col-12"><p class="text-danger">Ошибка загрузки вакансий</p></div>';
         }
     }
 
-    function searchVacancies() {
-        const keyword = document.getElementById('searchInput').value.trim();
-        loadVacancies(keyword);
+    function applyFilters() {
+        const keyword = document.getElementById('keyword').value.trim();
+        const type = document.getElementById('typeFilter').value;
+        const categoryId = document.getElementById('categoryFilter').value;
+
+        loadVacancies(keyword, type, categoryId);
     }
 
-    window.onload = () => loadVacancies();
+    window.onload = () => {
+        loadVacancies();
+    };
 </script>
 </body>
 </html>

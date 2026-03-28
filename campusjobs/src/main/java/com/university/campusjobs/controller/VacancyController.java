@@ -39,4 +39,15 @@ public class VacancyController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @Operation(summary = "Получить вакансии с фильтрами")
+    @GetMapping("/filtered")
+    public ResponseEntity<List<Vacancy>> getFilteredVacancies(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Long categoryId) {
+
+        return ResponseEntity.ok(vacancyService.getVacanciesWithFilters(keyword, type, categoryId));
+    }
+
 }
