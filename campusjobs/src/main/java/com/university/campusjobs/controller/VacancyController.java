@@ -31,4 +31,12 @@ public class VacancyController {
     public ResponseEntity<List<Vacancy>> searchVacancies(@RequestParam(required = false) String keyword) {
         return ResponseEntity.ok(vacancyService.searchVacancies(keyword));
     }
+
+    @Operation(summary = "Получить одну вакансию по ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<Vacancy> getVacancyById(@PathVariable Long id) {
+        return vacancyService.getVacancyById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

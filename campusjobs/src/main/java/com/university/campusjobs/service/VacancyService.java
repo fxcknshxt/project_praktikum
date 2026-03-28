@@ -5,6 +5,7 @@ import com.university.campusjobs.repository.VacancyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VacancyService {
@@ -25,4 +26,9 @@ public class VacancyService {
         }
         return vacancyRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword);
     }
+
+    public Optional<Vacancy> getVacancyById(Long id) {
+        return vacancyRepository.findById(id);
+    }
+
 }

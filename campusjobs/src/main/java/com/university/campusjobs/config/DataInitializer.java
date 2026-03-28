@@ -21,6 +21,21 @@ public class DataInitializer {
             VacancyRepository vacancyRepository) {
 
         return args -> {
+            User studentUser = new User();
+            studentUser.setUsername("student1");
+            studentUser.setEmail("student1@university.ru");
+            studentUser.setPassword("password");
+            studentUser.setRole("STUDENT");
+            userRepository.save(studentUser);
+
+            Student student = new Student();
+            student.setUser(studentUser);
+            student.setFullName("Иванов Иван Иванович");
+            student.setFaculty("Факультет информационных технологий");
+            student.setCourse(3);
+            student.setStudentGroup("ИТ-31");
+            student.setPhone("+79161234567");
+            studentRepository.save(student);
             Category it = new Category();
             it.setName("IT и программирование");
             categoryRepository.save(it);

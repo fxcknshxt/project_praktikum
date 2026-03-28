@@ -20,21 +20,22 @@ public class Student {
     private User user;
 
     @NotBlank(message = "ФИО обязательно")
-    @Size(max = 100, message = "ФИО не может быть длиннее 100 символов")
+    @Size(max = 100)
     private String fullName;
 
     @NotBlank(message = "Факультет обязателен")
     private String faculty;
 
-    @Min(value = 1, message = "Курс должен быть не меньше 1")
-    @Max(value = 6, message = "Курс не может быть больше 6")
+    @Min(value = 1)
+    @Max(value = 6)
     private Integer course;
 
-    private String group;
+    @Column(name = "student_group")
+    private String studentGroup;
 
-    @Pattern(regexp = "^\\+?\\d{10,15}$", message = "Некорректный формат телефона")
+    @Pattern(regexp = "^\\+?\\d{10,15}$")
     private String phone;
 
-    @Size(max = 500, message = "Описание не может быть длиннее 500 символов")
+    @Size(max = 500)
     private String about;
 }
