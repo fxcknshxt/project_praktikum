@@ -17,7 +17,7 @@
         <a class="navbar-brand" href="/index.html">Campus Jobs</a>
         <div class="navbar-nav ms-auto">
             <a class="nav-link" href="/index.html">Главная</a>
-            <a class="nav-link" href="/vacancies.html">Вакансии</a>
+            <a class="nav-link active" href="/vacancies.html">Вакансии</a>
             <a class="nav-link" href="/my-applications.html">Мои заявки</a>
             <a class="nav-link" href="/create-vacancy.html">Разместить вакансию</a>
         </div>
@@ -27,14 +27,13 @@
 <div class="container mt-4">
     <h2>Вакансии и стажировки</h2>
 
-    <!-- Фильтры -->
     <div class="row mb-4">
         <div class="col-md-3">
             <input type="text" id="keyword" class="form-control" placeholder="Поиск по названию...">
         </div>
         <div class="col-md-3">
             <select id="typeFilter" class="form-select">
-                <option value="">Все типы занятости</option>
+                <option value="">Все типы</option>
                 <option value="INTERNSHIP">Стажировка</option>
                 <option value="PART_TIME">Частичная занятость</option>
                 <option value="FULL_TIME">Полная занятость</option>
@@ -43,7 +42,6 @@
         <div class="col-md-3">
             <select id="categoryFilter" class="form-select">
                 <option value="">Все категории</option>
-                <!-- Заполнится динамически -->
             </select>
         </div>
         <div class="col-md-3">
@@ -51,22 +49,36 @@
         </div>
     </div>
 
-    <div class="row" id="vacanciesList">
-    </div>
+    <div class="row" id="vacanciesList"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    let allCategories = [];
-
     async function loadCategories() {
         try {
-            const res = await fetch('/api/categories');
-        } catch(e) {}
+            const response = await fetch('/api/vacancies/categories');
+            if (!response.ok) throw new Error("Не удалось загрузить категории");
+
+            const categories = await response.json();
+            const select = document.getElementById('categoryFilter');
+
+            select.innerHTML = '<option value="">Все категории</option>';
+
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = cat.name;
+                select.appendChild(option);
+            });
+
+            console.log("Категории загружены:", categories.length);
+        } catch (e) {
+            console.error("Ошибка загрузки категорий:", e);
+        }
     }
 
     async function loadVacancies(keyword = '', type = '', categoryId = '') {
-        let url = `/api/vacancies/filtered?keyword=${encodeURIComponent(keyword)}&type=${type}&categoryId=${categoryId}`;
+        let url = `/api/vacancies/filtered?keyword=${encodeURIComponent(keyword)}&type=${type}&categoryId=${categoryId || ''}`;
 
         try {
             const response = await fetch(url);
@@ -102,7 +114,7 @@
             });
         } catch (error) {
             console.error(error);
-            document.getElementById('vacanciesList').innerHTML = '<div class="col-12"><p class="text-danger">Ошибка загрузки вакансий</p></div>';
+            document.getElementById('vacanciesList').innerHTML = '<div class="col-12 text-danger">Ошибка загрузки вакансий</div>';
         }
     }
 
@@ -110,11 +122,11 @@
         const keyword = document.getElementById('keyword').value.trim();
         const type = document.getElementById('typeFilter').value;
         const categoryId = document.getElementById('categoryFilter').value;
-
         loadVacancies(keyword, type, categoryId);
     }
 
     window.onload = () => {
+        loadCategories();
         loadVacancies();
     };
 </script>

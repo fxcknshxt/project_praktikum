@@ -1,6 +1,8 @@
 package com.university.campusjobs.controller;
 
+import com.university.campusjobs.entity.Category;
 import com.university.campusjobs.entity.Vacancy;
+import com.university.campusjobs.repository.CategoryRepository;
 import com.university.campusjobs.service.VacancyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,9 +17,11 @@ import java.util.List;
 public class VacancyController {
 
     private final VacancyService vacancyService;
+    private final CategoryRepository categoryRepository;
 
-    public VacancyController(VacancyService vacancyService) {
+    public VacancyController(VacancyService vacancyService, CategoryRepository categoryRepository) {
         this.vacancyService = vacancyService;
+        this.categoryRepository = categoryRepository;
     }
 
     @Operation(summary = "Получить все активные вакансии")
@@ -32,14 +36,6 @@ public class VacancyController {
         return ResponseEntity.ok(vacancyService.searchVacancies(keyword));
     }
 
-    @Operation(summary = "Получить одну вакансию по ID")
-    @GetMapping("/{id}")
-    public ResponseEntity<Vacancy> getVacancyById(@PathVariable Long id) {
-        return vacancyService.getVacancyById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @Operation(summary = "Получить вакансии с фильтрами")
     @GetMapping("/filtered")
     public ResponseEntity<List<Vacancy>> getFilteredVacancies(
@@ -50,4 +46,18 @@ public class VacancyController {
         return ResponseEntity.ok(vacancyService.getVacanciesWithFilters(keyword, type, categoryId));
     }
 
+
+    @Operation(summary = "Получить все категории")
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getAllCategories() {
+        return ResponseEntity.ok(categoryRepository.findAll());
+    }
+
+    @Operation(summary = "Получить одну вакансию по ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<Vacancy> getVacancyById(@PathVariable Long id) {
+        return vacancyService.getVacancyById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
