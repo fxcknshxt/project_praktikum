@@ -9,7 +9,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vacancy {
@@ -27,18 +28,18 @@ public class Vacancy {
     private Category category;
 
     @NotBlank(message = "Заголовок вакансии обязателен")
-    @Size(max = 100, message = "Заголовок не может быть длиннее 100 символов")
+    @Size(max = 100)
     private String title;
 
     @NotBlank(message = "Описание вакансии обязательно")
-    @Size(max = 2000, message = "Описание не может быть длиннее 2000 символов")
+    @Size(max = 2000)
     private String description;
 
     @Positive(message = "Зарплата должна быть положительной")
     private BigDecimal salary;
 
     @NotBlank(message = "Тип занятости обязателен")
-    @Pattern(regexp = "INTERNSHIP|PART_TIME|FULL_TIME", message = "Тип должен быть INTERNSHIP, PART_TIME или FULL_TIME")
+    @Pattern(regexp = "INTERNSHIP|PART_TIME|FULL_TIME")
     private String type;
 
     private String location;
@@ -47,5 +48,14 @@ public class Vacancy {
 
     private LocalDate deadline;
 
+    @Column(name = "is_active")
     private boolean isActive = true;
+
+    public void setIsActive(boolean isActive){
+        this.isActive = isActive;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
 }
