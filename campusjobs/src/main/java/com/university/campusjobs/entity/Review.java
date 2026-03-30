@@ -7,7 +7,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Review {
@@ -16,25 +17,15 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "from_user_id", nullable = false)
-    private User fromUser;
-
-    @ManyToOne
-    @JoinColumn(name = "to_user_id", nullable = false)
-    private User toUser;
-
-    @ManyToOne
-    @JoinColumn(name = "vacancy_id")
-    private Vacancy vacancy;
-
-    @Min(value = 1, message = "Рейтинг от 1 до 5")
-    @Max(value = 5, message = "Рейтинг от 1 до 5")
+    @Min(1)
+    @Max(5)
     private Integer rating;
 
-    @Size(max = 500, message = "Комментарий не может быть длиннее 500 символов")
+    @Size(max = 500)
     private String comment;
 
-    @NotBlank(message = "Тип отзыва обязателен")
-    private String type; // STUDENT_TO_EMPLOYER или EMPLOYER_TO_STUDENT
+    private String type; // STUDENT_TO_EMPLOYER
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
 }
