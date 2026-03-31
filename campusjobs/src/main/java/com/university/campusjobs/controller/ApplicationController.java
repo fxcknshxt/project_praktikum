@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,12 +22,15 @@ public class ApplicationController {
         this.applicationService = applicationService;
     }
 
-    @Operation(summary = "Подать заявку на вакансию")
+    @Operation(summary = "Подать заявку на вакансию с резюме")
     @PostMapping
     public ResponseEntity<Application> createApplication(
             @RequestParam Long studentId,
             @RequestParam Long vacancyId,
-            @RequestParam String coverLetterContent) {     // ← Изменено на @RequestParam
+            @RequestParam String coverLetterContent,
+            @RequestParam("resume") MultipartFile resumeFile) {
+
+        String fileName = System.currentTimeMillis() + "_" + resumeFile.getOriginalFilename();
 
         CoverLetter coverLetter = new CoverLetter();
         coverLetter.setContent(coverLetterContent);

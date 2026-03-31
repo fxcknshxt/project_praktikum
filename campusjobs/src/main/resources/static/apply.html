@@ -28,24 +28,19 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-4">
-                        <h5 id="vacancyTitle">Название вакансии</h5>
+                        <h5 id="vacancyTitle"></h5>
                         <p class="text-muted" id="companyName"></p>
                     </div>
 
-                    <form id="applicationForm">
+                    <form id="applicationForm" enctype="multipart/form-data">
                         <div class="mb-3">
-                            <label class="form-label">Выберите резюме *</label>
-                            <select id="resumeId" class="form-select" required>
-                                <option value="">Выберите резюме...</option>
-                                <option value="1">Резюме_Java_Developer.pdf</option>
-                                <option value="2">Резюме_Общее.pdf</option>
-                            </select>
+                            <label class="form-label">Резюме (PDF или Word) *</label>
+                            <input type="file" id="resume" class="form-control" accept=".pdf,.doc,.docx" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Сопроводительное письмо *</label>
-                            <textarea id="coverLetter" class="form-control" rows="7"
-                                      placeholder="Расскажите, почему вы подходите на эту позицию..." required></textarea>
+                            <textarea id="coverLetter" class="form-control" rows="7" required></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-success btn-lg w-100">
@@ -79,28 +74,34 @@
         e.preventDefault();
 
         const coverLetterText = document.getElementById('coverLetter').value.trim();
-        const resumeId = document.getElementById('resumeId').value;
+        const resumeFile = document.getElementById('resume').files[0];
 
         if (!coverLetterText) {
             alert("Напишите сопроводительное письмо!");
             return;
         }
-        if (!resumeId) {
-            alert("Выберите резюме из списка!");
+        if (!resumeFile) {
+            alert("Загрузите файл резюме!");
             return;
         }
 
+        const formData = new FormData();
+        formData.append("studentId", "1");
+        formData.append("vacancyId", vacancyId);
+        formData.append("coverLetterContent", coverLetterText);
+        formData.append("resume", resumeFile);
+
         try {
-            const response = await fetch(
-                `/api/applications?studentId=1&vacancyId=${vacancyId}&coverLetterContent=${encodeURIComponent(coverLetterText)}`,
-                { method: 'POST' }
-            );
+            const response = await fetch('/api/applications', {
+                method: 'POST',
+                body: formData
+            });
 
             if (response.ok) {
                 alert("Заявка успешно отправлена!");
                 window.location.href = "/my-applications.html";
             } else {
-                alert("Ошибка при отправке заявки (код: " + response.status + ")");
+                alert("Ошибка при отправке заявки");
             }
         } catch (error) {
             console.error(error);
