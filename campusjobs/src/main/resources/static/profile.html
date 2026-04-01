@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Campus Jobs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/index.html">Campus Jobs</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/index.html">Главная</a>
+            <a class="nav-link" href="/vacancies.html">Вакансии</a>
+            <a class="nav-link" href="/my-applications.html">Мои заявки</a>
+            <a class="nav-link active" href="/profile.html">Личный кабинет</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Иванов Иван Иванович</h4>
+                    <p class="text-muted">3 курс, ИТ-31</p>
+                    <p>Факультет информационных технологий</p>
+                    <hr>
+                    <button class="btn btn-outline-primary w-100 mb-2">Редактировать профиль</button>
+                    <button class="btn btn-outline-secondary w-100">Подписаться на уведомления</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h4>Быстрые действия</h4>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <a href="/my-applications.html" class="text-decoration-none">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <h5>Мои заявки</h5>
+                                <p class="text-muted">Просмотреть статус</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 mb-3">
+                    <a href="/vacancies.html" class="text-decoration-none">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <h5>Найти вакансии</h5>
+                                <p class="text-muted">Поиск и фильтры</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <h4 class="mt-4">Последние действия</h4>
+            <div id="recentActivity" class="list-group">
+                <!-- Заполнится через JS при желании -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

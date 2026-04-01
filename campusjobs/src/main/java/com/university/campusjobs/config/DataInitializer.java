@@ -89,11 +89,11 @@ public class DataInitializer {
             v3.setTitle("Помощник в деканате");
             v3.setDescription("Помощь в административных задачах, работа с документами.");
             v3.setSalary(new BigDecimal("25000"));
-            v3.setType("PART_TIME");
+            v3.setType("FULL_TIME");
             v3.setLocation("Университетский кампус");
             vacancyRepository.save(v3);
 
-            System.out.println("✅ Тестовые данные успешно загружены! Добавлено " + vacancyRepository.count() + " вакансий.");
+            System.out.println("Тестовые данные успешно загружены! Добавлено " + vacancyRepository.count() + " вакансий.");
         };
     }
 }

@@ -22,14 +22,14 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-6">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header bg-info text-white">
                     <h4 class="mb-0">Оставить отзыв о стажировке</h4>
                 </div>
                 <div class="card-body">
                     <form id="reviewForm">
                         <div class="mb-3">
-                            <label class="form-label">Рейтинг (1-5)</label>
+                            <label class="form-label">Рейтинг (1-5) *</label>
                             <select id="rating" class="form-select" required>
                                 <option value="5">5 — Отлично</option>
                                 <option value="4">4 — Хорошо</option>
@@ -41,7 +41,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Комментарий</label>
-                            <textarea id="comment" class="form-control" rows="4" placeholder="Ваш отзыв..."></textarea>
+                            <textarea id="comment" class="form-control" rows="5" placeholder="Что вам понравилось или не понравилось?"></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-lg w-100">
@@ -62,20 +62,25 @@
         const rating = document.getElementById('rating').value;
         const comment = document.getElementById('comment').value.trim();
 
-        // Для теста используем applicationId = 1
+        if (!comment) {
+            alert("Напишите комментарий к отзыву!");
+            return;
+        }
+
         try {
-            const response = await fetch('/api/reviews?applicationId=1&rating=' + rating + '&comment=' + encodeURIComponent(comment), {
+            const response = await fetch(`/api/reviews?applicationId=1&rating=${rating}&comment=${encodeURIComponent(comment)}`, {
                 method: 'POST'
             });
 
             if (response.ok) {
-                alert("Отзыв успешно отправлен!");
+                alert("Отзыв успешно отправлен! Спасибо!");
                 window.location.href = "/my-applications.html";
             } else {
                 alert("Ошибка при отправке отзыва");
             }
         } catch (error) {
-            alert("Ошибка соединения");
+            console.error(error);
+            alert("Ошибка соединения с сервером");
         }
     });
 </script>
