@@ -21,53 +21,103 @@
 </nav>
 
 <div class="container mt-5">
+    <h2>Личный кабинет</h2>
+
     <div class="row">
+        <!-- Профиль -->
         <div class="col-md-4">
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-body text-center">
-                    <h4>Иванов Иван Иванович</h4>
-                    <p class="text-muted">3 курс, ИТ-31</p>
-                    <p>Факультет информационных технологий</p>
+                    <h4 id="fullName">Иванов Иван Иванович</h4>
+                    <p class="text-muted" id="studentInfo">3 курс, ИТ-31</p>
+                    <p id="faculty">Факультет информационных технологий</p>
                     <hr>
-                    <button class="btn btn-outline-primary w-100 mb-2">Редактировать профиль</button>
+                    <button class="btn btn-primary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        Редактировать профиль
+                    </button>
                     <button class="btn btn-outline-secondary w-100">Подписаться на уведомления</button>
                 </div>
             </div>
         </div>
 
+        <!-- Быстрые действия -->
         <div class="col-md-8">
-            <h4>Быстрые действия</h4>
-            <div class="row">
-                <div class="col-6 mb-3">
+            <h5>Быстрые действия</h5>
+            <div class="row g-3">
+                <div class="col-6">
                     <a href="/my-applications.html" class="text-decoration-none">
                         <div class="card h-100 text-center">
                             <div class="card-body">
                                 <h5>Мои заявки</h5>
-                                <p class="text-muted">Просмотреть статус</p>
+                                <p class="text-muted small">Просмотреть статус</p>
                             </div>
                         </div>
                     </a>
                 </div>
-                <div class="col-6 mb-3">
+                <div class="col-6">
                     <a href="/vacancies.html" class="text-decoration-none">
                         <div class="card h-100 text-center">
                             <div class="card-body">
                                 <h5>Найти вакансии</h5>
-                                <p class="text-muted">Поиск и фильтры</p>
+                                <p class="text-muted small">Поиск и фильтры</p>
                             </div>
                         </div>
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
-            <h4 class="mt-4">Последние действия</h4>
-            <div id="recentActivity" class="list-group">
-                <!-- Заполнится через JS при желании -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Редактировать профиль</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">ФИО</label>
+                    <input type="text" id="editFullName" class="form-control" value="Иванов Иван Иванович">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Факультет</label>
+                    <input type="text" id="editFaculty" class="form-control" value="Факультет информационных технологий">
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Курс</label>
+                        <input type="number" id="editCourse" class="form-control" value="3">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Группа</label>
+                        <input type="text" id="editGroup" class="form-control" value="ИТ-31">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Телефон</label>
+                    <input type="tel" id="editPhone" class="form-control" value="+79161234567">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="saveProfile()">Сохранить изменения</button>
             </div>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function saveProfile() {
+        const fullName = document.getElementById('editFullName').value;
+        document.getElementById('fullName').textContent = fullName;
+
+        alert("Профиль успешно обновлён!");
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+        modal.hide();
+    }
+</script>
 </body>
 </html>
